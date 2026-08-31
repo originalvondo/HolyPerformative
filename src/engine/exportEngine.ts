@@ -77,7 +77,7 @@ export async function downloadDualPrintSheet(
     // Header info
     ctx.fillStyle = '#212121';
     ctx.font = 'bold 26px "Space Mono", monospace, sans-serif';
-    ctx.fillText(`HOLYPERFORMATIVE // ${(state.name || 'ID CARD').toUpperCase()}`, padding, 50);
+    ctx.fillText('HOLYPERFORMATIVE', padding, 50);
 
     ctx.font = '14px "Space Mono", monospace, sans-serif';
     ctx.fillStyle = '#616161';
