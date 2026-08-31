@@ -1,6 +1,6 @@
 import { CardState } from '../types/card';
 
-const GOOGLE_FONT_URL_MAP: Record<string, string> = {
+export const GOOGLE_FONT_URL_MAP: Record<string, string> = {
   'Cinzel Decorative': 'https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap',
   'Inter': 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap',
   'JetBrains Mono': 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap',
@@ -24,7 +24,7 @@ async function convertBlobToBase64(blob: Blob): Promise<string> {
   });
 }
 
-async function fetchAndInlineFontCSS(fontFamily: string): Promise<string> {
+export async function fetchAndInlineFontCSS(fontFamily: string): Promise<string> {
   if (fontEmbedCache.has(fontFamily)) {
     return fontEmbedCache.get(fontFamily)!;
   }
@@ -53,7 +53,7 @@ async function fetchAndInlineFontCSS(fontFamily: string): Promise<string> {
           const base64DataUri = await convertBlobToBase64(blob);
           css = css.split(fontUrl).join(base64DataUri);
         } catch {
-          // fallback to remote URL if individual fetch fails
+          // fallback
         }
       })
     );
@@ -93,9 +93,9 @@ export function extractUsedFonts(state: CardState): string[] {
   return Array.from(fontSet);
 }
 
-export async function getEmbeddableFontCSS(state: CardState): Promise<string> {
-  const fonts = extractUsedFonts(state);
-  const cssBlocks = await Promise.all(fonts.map(font => fetchAndInlineFontCSS(font)));
+export async function getEmbeddableFontCSS(_state?: CardState): Promise<string> {
+  const allFonts = Object.keys(GOOGLE_FONT_URL_MAP);
+  const cssBlocks = await Promise.all(allFonts.map(font => fetchAndInlineFontCSS(font)));
   return cssBlocks.filter(Boolean).join('\n');
 }
 

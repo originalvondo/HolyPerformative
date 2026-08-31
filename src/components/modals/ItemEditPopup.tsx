@@ -519,9 +519,9 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
 
         {type === 'cardSettings' && (
           <div className="space-y-2 text-xs">
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
-                <label className="text-[10px] text-[#3C3E4A] block mb-1 font-bold truncate">Card BG</label>
+                <label className="text-[10px] text-[#3C3E4A] block mb-1 font-bold truncate">Front BG</label>
                 <div className="flex items-center gap-1.5">
                   <input
                     type="color"
@@ -533,6 +533,24 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
                     type="text"
                     value={state.backgroundColor || '#ffffff'}
                     onChange={(e) => actions.updateState(prev => { prev.backgroundColor = e.target.value; return prev; })}
+                    className="w-full bg-[#F3F1EC] border border-[#B6B8A8]/60 focus:border-[#3C3E4A] rounded px-1.5 py-0.5 text-[#3C3E4A] font-mono text-[10px] outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
+                <label className="text-[10px] text-[#3C3E4A] block mb-1 font-bold truncate">Back BG</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="color"
+                    value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                    onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
+                    className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer shrink-0"
+                  />
+                  <input
+                    type="text"
+                    value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                    onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
                     className="w-full bg-[#F3F1EC] border border-[#B6B8A8]/60 focus:border-[#3C3E4A] rounded px-1.5 py-0.5 text-[#3C3E4A] font-mono text-[10px] outline-none"
                   />
                 </div>
@@ -556,7 +574,7 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
                 </div>
               </div>
 
-              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm col-span-2 sm:col-span-1">
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
                 <label className="text-[10px] text-[#3C3E4A] block mb-1 font-bold truncate">Accent Color</label>
                 <div className="flex items-center gap-1.5">
                   <input
@@ -843,15 +861,41 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-0.5">
-              <label className="text-[10px] text-[#3C3E4A] font-semibold">Accent Color:</label>
-              <input
-                type="color"
-                value={state.back.accentColor || state.typography.accentColor}
-                onChange={(e) => actions.updateBack({ accentColor: e.target.value })}
-                className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer"
-              />
-              <span className="font-mono text-[10px] text-[#3C3E4A]">{state.back.accentColor || state.typography.accentColor}</span>
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-black/10">
+              <div>
+                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Back Face BG</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="color"
+                    value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                    onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
+                    className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer shrink-0"
+                  />
+                  <input
+                    type="text"
+                    value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                    onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
+                    className="w-full bg-[#F3F1EC] border border-[#B6B8A8]/60 focus:border-[#3C3E4A] rounded px-1.5 py-0.5 text-[#3C3E4A] font-mono text-[10px] outline-none"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Accent Color</label>
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="color"
+                    value={state.back.accentColor || state.typography.accentColor}
+                    onChange={(e) => actions.updateBack({ accentColor: e.target.value })}
+                    className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer shrink-0"
+                  />
+                  <input
+                    type="text"
+                    value={state.back.accentColor || state.typography.accentColor}
+                    onChange={(e) => actions.updateBack({ accentColor: e.target.value })}
+                    className="w-full bg-[#F3F1EC] border border-[#B6B8A8]/60 focus:border-[#3C3E4A] rounded px-1.5 py-0.5 text-[#3C3E4A] font-mono text-[10px] outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -904,6 +948,24 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
                 onChange={(e) => actions.updateBack({ quote: e.target.value })}
                 className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded p-1.5 text-[#3C3E4A] text-[11px] outline-none shadow-sm"
               />
+            </div>
+
+            <div className="pt-1 border-t border-black/10">
+              <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Back Face Background</label>
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="color"
+                  value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                  onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
+                  className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer shrink-0"
+                />
+                <input
+                  type="text"
+                  value={state.back?.backgroundColor || state.backgroundColor || '#ffffff'}
+                  onChange={(e) => actions.updateBack({ backgroundColor: e.target.value })}
+                  className="w-full bg-[#F3F1EC] border border-[#B6B8A8]/60 focus:border-[#3C3E4A] rounded px-1.5 py-0.5 text-[#3C3E4A] font-mono text-[10px] outline-none"
+                />
+              </div>
             </div>
           </div>
         )}

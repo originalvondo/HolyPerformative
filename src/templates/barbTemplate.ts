@@ -91,7 +91,7 @@ export const barbTemplate: CardTemplate = {
       subtitle: 'GGbissa Archive',
       quote: 'CREATE WITHOUT LIMITS',
       bigLogoText: 'BARB',
-      bigLogoFont: 'Press Start 2P',
+      bigLogoFont: 'UnifrakturMaguntia',
       bigLogoColor: '#374151',
       accentColor: '#ff2d78',
       backgroundColor: '#f5f5f4',

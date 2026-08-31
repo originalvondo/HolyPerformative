@@ -8,7 +8,7 @@ import { ExportModal } from './components/modals/ExportModal';
 import { preloadAllCardFonts } from './engine/fontEmbedder';
 
 export const App: React.FC = () => {
-  const { actions } = useCardStore();
+  const { state, actions } = useCardStore();
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [activeEditType, setActiveEditType] = useState<string | null>(null);
 
@@ -38,8 +38,8 @@ export const App: React.FC = () => {
   }, [actions]);
 
   return (
-    <div className="relative w-full max-w-full h-screen flex flex-col bg-[#F3F1EC] text-[#3C3E4A] overflow-hidden select-none font-sans">
-      <Background />
+    <div className="relative w-full max-w-full h-screen flex flex-col text-[#3C3E4A] overflow-hidden select-none font-sans">
+      <Background templateId={state.templateId} backgroundColor={state.backgroundColor} />
       <Header onOpenExport={() => setIsExportModalOpen(true)} />
 
       <main className="flex-1 w-full max-w-full flex overflow-hidden relative">
