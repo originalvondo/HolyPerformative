@@ -24,6 +24,9 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ clientX: 0, clientY: 0, startXPercent: 0, startYPercent: 0 });
 
+  const [isResizing, setIsResizing] = useState(false);
+  const [resizeStart, setResizeStart] = useState({ clientX: 0, clientY: 0, startScale: 1 });
+
   // Mouse Drag Start
   const handleMouseDown = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,19 +74,54 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
     });
   }, [isDragging, dragStart, onUpdate, containerRef]);
 
-  // Window listeners for mouse
+  // Resize Handlers
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsResizing(true);
+    setResizeStart({
+      clientX: e.clientX,
+      clientY: e.clientY,
+      startScale: sticker.scale || 1,
+    });
+  };
+
+  const handleResizeTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (e.touches.length === 0) return;
+    const touch = e.touches[0];
+    setIsResizing(true);
+    setResizeStart({
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+      startScale: sticker.scale || 1,
+    });
+  };
+
+  const updateScale = useCallback((clientX: number, clientY: number) => {
+    if (!isResizing) return;
+    const deltaX = clientX - resizeStart.clientX;
+    const deltaY = clientY - resizeStart.clientY;
+    const delta = (deltaX + deltaY) / 100;
+
+    const newScale = Math.max(0.3, Math.min(4.0, resizeStart.startScale + delta));
+    onUpdate({
+      scale: Math.round(newScale * 10) / 10,
+    });
+  }, [isResizing, resizeStart, onUpdate]);
+
+  // Window listeners
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        updatePosition(e.clientX, e.clientY);
-      }
+      if (isDragging) updatePosition(e.clientX, e.clientY);
+      if (isResizing) updateScale(e.clientX, e.clientY);
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      setIsResizing(false);
     };
 
-    if (isDragging) {
+    if (isDragging || isResizing) {
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       return () => {
@@ -91,22 +129,27 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, updatePosition]);
+  }, [isDragging, isResizing, updatePosition, updateScale]);
 
-  // Window listeners for touch (Mobile)
   useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
-      if (isDragging && e.touches.length > 0) {
+      if (e.touches.length === 0) return;
+      if (isDragging) {
         if (e.cancelable) e.preventDefault();
         updatePosition(e.touches[0].clientX, e.touches[0].clientY);
+      }
+      if (isResizing) {
+        if (e.cancelable) e.preventDefault();
+        updateScale(e.touches[0].clientX, e.touches[0].clientY);
       }
     };
 
     const handleTouchEnd = () => {
       setIsDragging(false);
+      setIsResizing(false);
     };
 
-    if (isDragging) {
+    if (isDragging || isResizing) {
       window.addEventListener('touchmove', handleTouchMove, { passive: false });
       window.addEventListener('touchend', handleTouchEnd);
       window.addEventListener('touchcancel', handleTouchEnd);
@@ -116,7 +159,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         window.removeEventListener('touchcancel', handleTouchEnd);
       };
     }
-  }, [isDragging, updatePosition]);
+  }, [isDragging, isResizing, updatePosition, updateScale]);
 
   const stickerDef = STICKER_LIBRARY.find(s => s.id === sticker.content);
 
@@ -177,6 +220,18 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
         </div>
       )}
 
+      {/* Resize Handle at Bottom-Right Corner */}
+      {isSelected && (
+        <div
+          onMouseDown={handleResizeMouseDown}
+          onTouchStart={handleResizeTouchStart}
+          className="absolute -bottom-2 -right-2 w-4 h-4 bg-[#3C3E4A] border-2 border-white rounded-full cursor-nwse-resize shadow-md flex items-center justify-center z-40"
+          title="Drag to resize"
+        >
+          <div className="w-1 h-1 bg-white rounded-full" />
+        </div>
+      )}
+
       {/* Delete button when selected */}
       {isSelected && (
         <div
@@ -193,7 +248,7 @@ export const DraggableElement: React.FC<DraggableElementProps> = ({
               e.stopPropagation();
               onDelete();
             }}
-            className="p-1 hover:text-red-300 text-[#F3F1EC] transition-colors flex items-center gap-1 text-[10px] font-mono"
+            className="p-1 hover:text-red-300 text-[#F3F1EC] transition-colors flex items-center gap-1 text-[10px] font-mono font-bold"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Delete</span>

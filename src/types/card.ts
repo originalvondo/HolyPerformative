@@ -69,6 +69,9 @@ export interface CardState {
   name: string;
   cardRadius: number; // px (e.g. 16)
   backgroundColor?: string; // Card base color
+  layoutVariant?: 'standard' | 'travel-passport';
+  cardTexture?: 'none' | 'pink-creased-paper' | 'grain';
+  cardFrame?: 'none' | 'stars-perimeter' | 'double-line';
   
   // Header / Branding
   brandLogo: {

@@ -302,8 +302,78 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
               <span>Upload Custom Photo</span>
             </button>
 
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
+                <div className="flex justify-between text-[10px] text-[#3C3E4A] mb-1 font-bold">
+                  <span>Photo Width</span>
+                  <span>{Math.round(state.photo.width)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={12}
+                  max={70}
+                  value={state.photo.width}
+                  onChange={(e) => actions.updatePhoto({ width: Number(e.target.value) })}
+                  className="w-full accent-[#3C3E4A] cursor-pointer h-1.5"
+                />
+              </div>
+
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
+                <div className="flex justify-between text-[10px] text-[#3C3E4A] mb-1 font-bold">
+                  <span>Photo Height</span>
+                  <span>{Math.round(state.photo.height)}%</span>
+                </div>
+                <input
+                  type="range"
+                  min={15}
+                  max={85}
+                  value={state.photo.height}
+                  onChange={(e) => actions.updatePhoto({ height: Number(e.target.value) })}
+                  className="w-full accent-[#3C3E4A] cursor-pointer h-1.5"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm">
+                <div className="flex justify-between text-[10px] text-[#3C3E4A] mb-1 font-bold">
+                  <span>Border Radius</span>
+                  <span>{state.photo.borderRadius}px</span>
+                </div>
+                <input
+                  type="range"
+                  min={0}
+                  max={30}
+                  value={state.photo.borderRadius}
+                  onChange={(e) => actions.updatePhoto({ borderRadius: Number(e.target.value) })}
+                  className="w-full accent-[#3C3E4A] cursor-pointer h-1.5"
+                />
+              </div>
+
+              <div className="bg-[#FFFFFF] p-2 rounded-lg border border-[#B6B8A8]/60 shadow-sm flex items-center justify-between">
+                <div>
+                  <label className="text-[10px] text-[#3C3E4A] font-bold block">Photo Border</label>
+                  <input
+                    type="color"
+                    value={state.photo.borderColor}
+                    onChange={(e) => actions.updatePhoto({ borderColor: e.target.value, showBorder: true })}
+                    className="w-6 h-6 rounded border border-[#B6B8A8] bg-transparent cursor-pointer mt-0.5"
+                  />
+                </div>
+                <label className="flex items-center gap-1.5 text-[10px] font-bold text-[#3C3E4A] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={state.photo.showBorder}
+                    onChange={(e) => actions.updatePhoto({ showBorder: e.target.checked })}
+                    className="accent-[#3C3E4A]"
+                  />
+                  <span>Show</span>
+                </label>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between pt-0.5">
-              <span className="text-[10px] text-[#3C3E4A]/70 font-mono">High-resolution portrait</span>
+              <span className="text-[10px] text-[#3C3E4A]/70 font-mono">Drag on canvas to move & resize</span>
               <button
                 onClick={() => {
                   actions.deletePhoto();
@@ -320,6 +390,29 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
 
         {type === 'metadata' && (
           <div className="space-y-1.5 text-xs">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Name / Bearer</label>
+                <input
+                  type="text"
+                  value={state.fields.name || ''}
+                  onChange={(e) => actions.updateField('name', e.target.value)}
+                  className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded px-2 py-0.5 text-[#3C3E4A] font-bold outline-none shadow-sm text-xs"
+                  placeholder="YOUR NAME"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Label / Issued To</label>
+                <input
+                  type="text"
+                  value={state.fields.nameSecondary || ''}
+                  onChange={(e) => actions.updateField('nameSecondary', e.target.value)}
+                  className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded px-2 py-0.5 text-[#3C3E4A] outline-none shadow-sm text-xs"
+                  placeholder="e.g. Issued to"
+                />
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Date of Issue</label>
@@ -345,7 +438,7 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Location</label>
+                <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Place of Issue / Location</label>
                 <input
                   type="text"
                   value={state.fields.location || ''}
@@ -390,13 +483,25 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
 
         {type === 'disclaimer' && (
           <div className="space-y-2 text-xs">
-            <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Footer Statement</label>
-            <textarea
-              rows={2}
-              value={state.fields.disclaimer || ''}
-              onChange={(e) => actions.updateField('disclaimer', e.target.value)}
-              className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded p-1.5 text-[#3C3E4A] text-[11px] outline-none shadow-sm"
-            />
+            <div>
+              <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Section Title / Header</label>
+              <input
+                type="text"
+                value={state.fields.roleOrTitle || ''}
+                onChange={(e) => actions.updateField('roleOrTitle', e.target.value)}
+                className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded px-2 py-1 text-[#3C3E4A] outline-none shadow-sm font-bold"
+                placeholder="e.g. LICENSE OF TRAVEL"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] text-[#3C3E4A] block mb-0.5 font-semibold">Statement / Certification Text</label>
+              <textarea
+                rows={3}
+                value={state.fields.disclaimer || ''}
+                onChange={(e) => actions.updateField('disclaimer', e.target.value)}
+                className="w-full bg-[#FFFFFF] border border-[#B6B8A8] focus:border-[#3C3E4A] rounded p-1.5 text-[#3C3E4A] text-[11px] outline-none shadow-sm"
+              />
+            </div>
             <div className="flex justify-end">
               <button
                 onClick={() => {
@@ -406,7 +511,7 @@ export const ItemEditPopup: React.FC<ItemEditPopupProps> = ({ type, onClose }) =
                 className="px-2 py-0.5 bg-[#E0DFD2] hover:bg-red-100 text-red-600 border border-[#B6B8A8] hover:border-red-400 rounded flex items-center gap-1 text-[10px] font-bold transition-colors"
               >
                 <Trash2 className="w-3 h-3" />
-                <span>Remove Disclaimer</span>
+                <span>Clear Statement</span>
               </button>
             </div>
           </div>

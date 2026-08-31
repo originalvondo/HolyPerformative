@@ -10,6 +10,75 @@ export interface StickerDefinition {
 export const STICKER_LIBRARY: StickerDefinition[] = [
   // New Vintage Stamps & License Badges (from User Ref Images)
   {
+    id: 'star-perimeter-cmiyl',
+    name: 'Perimeter Star Border (★)',
+    category: 'badges',
+    defaultColor: '#1E1E1E',
+    svg: `<svg viewBox="0 0 540 340" fill="currentColor">
+      <text x="35" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="70" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="105" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="140" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="175" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="210" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="245" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="280" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="315" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="350" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="385" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="420" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="455" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="490" y="24" font-size="16" text-anchor="middle">★</text>
+      <text x="515" y="24" font-size="16" text-anchor="middle">★</text>
+
+      <text x="35" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="70" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="105" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="140" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="175" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="210" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="245" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="280" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="315" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="350" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="385" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="420" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="455" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="490" y="326" font-size="16" text-anchor="middle">★</text>
+      <text x="515" y="326" font-size="16" text-anchor="middle">★</text>
+
+      <text x="24" y="60" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="98" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="136" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="174" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="212" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="250" font-size="16" text-anchor="middle">★</text>
+      <text x="24" y="288" font-size="16" text-anchor="middle">★</text>
+
+      <text x="516" y="60" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="98" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="136" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="174" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="212" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="250" font-size="16" text-anchor="middle">★</text>
+      <text x="516" y="288" font-size="16" text-anchor="middle">★</text>
+    </svg>`
+  },
+  {
+    id: 'cmiyl-green-stamp',
+    name: 'Call Me Stamp (Green)',
+    category: 'stamps',
+    defaultColor: '#4E8E62',
+    svg: `<svg viewBox="0 0 170 85" fill="none" stroke="currentColor" stroke-width="2.5">
+      <g transform="rotate(-7 85 42)">
+        <ellipse cx="85" cy="42" rx="80" ry="36" stroke="currentColor" stroke-width="3" stroke-dasharray="6 3"/>
+        <ellipse cx="85" cy="42" rx="74" ry="30" stroke="currentColor" stroke-width="2"/>
+        <text x="85" y="38" font-size="14" font-weight="900" fill="currentColor" text-anchor="middle" font-family="'Outfit', 'Space Mono', sans-serif" letter-spacing="1">CALL ME IF</text>
+        <text x="85" y="55" font-size="16" font-weight="900" fill="currentColor" text-anchor="middle" font-family="'Outfit', 'Space Mono', sans-serif" letter-spacing="1.5">YOU GET LOST</text>
+      </g>
+    </svg>`
+  },
+  {
     id: 'star-row-border',
     name: 'Row of Stars (★)',
     category: 'badges',

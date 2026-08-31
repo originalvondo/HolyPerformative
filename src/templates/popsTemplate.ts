@@ -4,7 +4,7 @@ const PLACEHOLDER_AVATAR = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.or
 
 export const popsTemplate: CardTemplate = {
   id: 'pops-dither',
-  name: 'Theme #7',
+  name: 'Theme #5',
   description: 'Halftone artwork layout with hot-pink logo and crimson typography.',
   state: {
     id: 'pops-dither-state',
@@ -29,10 +29,10 @@ export const popsTemplate: CardTemplate = {
       ditherScale: 2,
       brightness: 0,
       contrast: 0,
-      x: 12,
+      x: 6,
       y: 26,
-      width: 28,
-      height: 46,
+      width: 24,
+      height: 48,
       borderRadius: 4,
       borderWidth: 1,
       borderColor: '#FDA4AF',

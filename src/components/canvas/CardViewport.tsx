@@ -142,6 +142,7 @@ export const CardViewport: React.FC<CardViewportProps> = ({
                   actions.setSelectedId(id);
                 }
               }}
+              onUpdatePhoto={(partial) => actions.updatePhoto(partial)}
               onUpdateSticker={(id, partial) => actions.updateSticker(id, partial)}
               onDeleteSticker={(id) => actions.removeSticker(id)}
             />

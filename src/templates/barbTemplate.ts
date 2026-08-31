@@ -4,7 +4,7 @@ const PLACEHOLDER_AVATAR = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.or
 
 export const barbTemplate: CardTemplate = {
   id: 'cyber-barb',
-  name: 'Theme #6',
+  name: 'Theme #4',
   description: 'Graphic identity card with pixel typography and starburst graphics.',
   state: {
     id: 'cyber-barb-state',
@@ -29,9 +29,9 @@ export const barbTemplate: CardTemplate = {
       ditherScale: 2,
       brightness: 0,
       contrast: 0,
-      x: 12,
-      y: 28,
-      width: 25,
+      x: 6,
+      y: 26,
+      width: 24,
       height: 48,
       borderRadius: 4,
       borderWidth: 2,
