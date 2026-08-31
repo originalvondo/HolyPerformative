@@ -5,17 +5,20 @@ import { Header } from './components/layout/Header';
 import { CardViewport } from './components/canvas/CardViewport';
 import { ItemEditPopup } from './components/modals/ItemEditPopup';
 import { ExportModal } from './components/modals/ExportModal';
+import { preloadAllCardFonts } from './engine/fontEmbedder';
 
 export const App: React.FC = () => {
   const { actions } = useCardStore();
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [activeEditType, setActiveEditType] = useState<string | null>(null);
 
-  // Hidden references for high-res PNG export
   const frontExportRef = useRef<HTMLDivElement>(null);
   const backExportRef = useRef<HTMLDivElement>(null);
 
-  // Keyboard Shortcuts
+  useEffect(() => {
+    preloadAllCardFonts();
+  }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes((e.target as HTMLElement)?.tagName)) {
@@ -36,13 +39,9 @@ export const App: React.FC = () => {
 
   return (
     <div className="relative w-full max-w-full h-screen flex flex-col bg-[#F3F1EC] text-[#3C3E4A] overflow-hidden select-none font-sans">
-      {/* Aesthetic Graph Paper Background */}
       <Background />
-
-      {/* Clean Aesthetic Header */}
       <Header onOpenExport={() => setIsExportModalOpen(true)} />
 
-      {/* Main Canvas Workspace */}
       <main className="flex-1 w-full max-w-full flex overflow-hidden relative">
         <CardViewport
           frontExportRef={frontExportRef}
@@ -51,7 +50,6 @@ export const App: React.FC = () => {
         />
       </main>
 
-      {/* Small Direct-Click Edit Popup */}
       <ItemEditPopup
         type={activeEditType}
         onClose={() => {
@@ -60,7 +58,6 @@ export const App: React.FC = () => {
         }}
       />
 
-      {/* Export Modal */}
       <ExportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}

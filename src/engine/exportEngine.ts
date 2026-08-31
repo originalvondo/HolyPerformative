@@ -1,19 +1,24 @@
 import { toCanvas } from 'html-to-image';
+import { CardState } from '../types/card';
+import { getEmbeddableFontCSS } from './fontEmbedder';
 
 export async function downloadDualPrintSheet(
   frontElement: HTMLElement,
   backElement: HTMLElement,
-  cardName: string
+  state: CardState
 ): Promise<void> {
   try {
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
 
+    const fontEmbedCSS = await getEmbeddableFontCSS(state);
+
     const renderOptions = {
       pixelRatio: 2,
       cacheBust: true,
       backgroundColor: 'transparent',
+      fontEmbedCSS: fontEmbedCSS || undefined,
     };
 
     const [frontCanvas, backCanvas] = await Promise.all([
@@ -42,7 +47,7 @@ export async function downloadDualPrintSheet(
 
     ctx.fillStyle = '#212121';
     ctx.font = 'bold 26px "Space Mono", monospace, sans-serif';
-    ctx.fillText(`HOLYPERFORMATIVE // ${cardName.toUpperCase()}`, padding, 50);
+    ctx.fillText(`HOLYPERFORMATIVE // ${(state.name || 'ID CARD').toUpperCase()}`, padding, 50);
 
     ctx.font = '14px "Space Mono", monospace, sans-serif';
     ctx.fillStyle = '#616161';
@@ -77,7 +82,8 @@ export async function downloadDualPrintSheet(
 
         const objectUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `${cardName.toLowerCase().replace(/[^a-z0-9]/g, '_')}_print_sheet.png`;
+        const filename = (state.name || 'id_card').toLowerCase().replace(/[^a-z0-9]/g, '_');
+        link.download = `${filename}_print_sheet.png`;
         link.href = objectUrl;
         document.body.appendChild(link);
         link.click();

@@ -411,12 +411,12 @@ export const CardFace = React.forwardRef<HTMLDivElement, CardFaceProps>(({
             {sticker.type === 'custom-text' ? (
               <div
                 style={{
-                  fontFamily: sticker.fontFamily || state.typography.primaryFont,
-                  color: sticker.color || state.typography.primaryColor,
+                  fontFamily: sticker.fontFamily || 'Inter',
+                  color: sticker.color || 'currentColor',
                   fontSize: '14px',
                   whiteSpace: 'nowrap',
                 }}
-                className="font-bold"
+                className="font-bold px-1.5 py-0.5 select-none"
               >
                 {sticker.content}
               </div>

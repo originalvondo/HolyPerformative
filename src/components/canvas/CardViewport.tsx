@@ -209,28 +209,26 @@ export const CardViewport: React.FC<CardViewportProps> = ({
       </div>
 
       <div className="fixed -left-[9999px] top-0 pointer-events-none z-[-100] select-none" aria-hidden="true">
-        <div ref={frontExportRef}>
-          <CardFace
-            state={state}
-            side="front"
-            selectedId={null}
-            onSelectElement={() => {}}
-            onUpdateSticker={() => {}}
-            onDeleteSticker={() => {}}
-            isExporting={true}
-          />
-        </div>
-        <div ref={backExportRef}>
-          <CardFace
-            state={state}
-            side="back"
-            selectedId={null}
-            onSelectElement={() => {}}
-            onUpdateSticker={() => {}}
-            onDeleteSticker={() => {}}
-            isExporting={true}
-          />
-        </div>
+        <CardFace
+          ref={frontExportRef}
+          state={state}
+          side="front"
+          selectedId={null}
+          onSelectElement={() => {}}
+          onUpdateSticker={() => {}}
+          onDeleteSticker={() => {}}
+          isExporting={true}
+        />
+        <CardFace
+          ref={backExportRef}
+          state={state}
+          side="back"
+          selectedId={null}
+          onSelectElement={() => {}}
+          onUpdateSticker={() => {}}
+          onDeleteSticker={() => {}}
+          isExporting={true}
+        />
       </div>
     </div>
   );

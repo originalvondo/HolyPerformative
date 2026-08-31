@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCardStore } from '../../store/useCardStore';
 import { downloadDualPrintSheet } from '../../engine/exportEngine';
+import { preloadAllCardFonts } from '../../engine/fontEmbedder';
 import { X, Download, Printer, CheckCircle2, Loader2 } from 'lucide-react';
 
 interface ExportModalProps {
@@ -20,6 +21,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   const [isExporting, setIsExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (isOpen) {
+      preloadAllCardFonts();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleExportDualSheet = async () => {
@@ -29,7 +36,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       await downloadDualPrintSheet(
         frontElementRef.current,
         backElementRef.current,
-        state.name
+        state
       );
       setExportSuccess('Print Sheet Downloaded!');
       setTimeout(() => {
@@ -37,7 +44,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         onClose();
       }, 1800);
     } catch (err) {
-      alert('Failed to generate print sheet.');
+      alert('Failed to generate print sheet. Please try again.');
     } finally {
       setIsExporting(false);
     }
@@ -46,8 +53,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3C3E4A]/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-[#F3F1EC] border border-[#3C3E4A]/50 rounded-xl w-full max-w-sm overflow-hidden shadow-2xl">
-        
-        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-[#B6B8A8]/60">
           <h2 className="text-sm font-bold font-mono text-[#3C3E4A]">EXPORT & DOWNLOAD</h2>
           <button
@@ -58,7 +63,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-5 space-y-4">
           {exportSuccess && (
             <div className="p-2.5 bg-[#E0DFD2] border border-[#B6B8A8] rounded-lg flex items-center gap-2 text-[#3C3E4A] text-xs font-mono font-bold">
@@ -71,7 +75,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             Downloads high-resolution Front & Back side-by-side print sheet with cut guidelines.
           </p>
 
-          {/* Solid Midnight Print Button */}
           <button
             onClick={handleExportDualSheet}
             disabled={isExporting}
@@ -90,7 +93,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           </button>
         </div>
 
-        {/* Footer */}
         <div className="p-3 bg-[#E0DFD2]/60 border-t border-[#B6B8A8]/60 flex items-center justify-between">
           <span className="text-[10px] font-mono text-[#3C3E4A]/70">HolyPerformative (HP)</span>
           <button
@@ -100,7 +102,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             Close
           </button>
         </div>
-
       </div>
     </div>
   );
