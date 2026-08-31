@@ -403,7 +403,7 @@ export const CardFace = React.forwardRef<HTMLDivElement, CardFaceProps>(({
         return (
           <div
             key={sticker.id}
-            className="absolute select-none pointer-events-none"
+            className="absolute select-none pointer-events-none z-20"
             style={{
               left: `${sticker.x}%`,
               top: `${sticker.y}%`,
@@ -411,6 +411,7 @@ export const CardFace = React.forwardRef<HTMLDivElement, CardFaceProps>(({
               transformOrigin: 'center center',
               color: sticker.color || 'currentColor',
               opacity: sticker.opacity ?? 1,
+              zIndex: 20,
             }}
           >
             {sticker.type === 'custom-text' ? (
