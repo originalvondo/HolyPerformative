@@ -35,6 +35,10 @@ export const CardFace = React.forwardRef<HTMLDivElement, CardFaceProps>(({
     s => s.side === 'both' || s.side === side
   );
 
+  const cardBgColor = side === 'front'
+    ? (state.backgroundColor || '#FAF7EB')
+    : (state.back?.backgroundColor || state.backgroundColor || '#FAF7EB');
+
   return (
     <div
       ref={combinedRef}
@@ -44,8 +48,9 @@ export const CardFace = React.forwardRef<HTMLDivElement, CardFaceProps>(({
         width: '540px',
         height: '340px',
         borderRadius: `${state.cardRadius}px`,
-        color: state.typography.primaryColor,
-        backgroundColor: side === 'front' ? (state.backgroundColor || '#ffffff') : (state.back.backgroundColor || '#fafafa'),
+        color: state.typography?.primaryColor || '#3C3E4A',
+        backgroundColor: cardBgColor,
+        background: cardBgColor,
       }}
       className="relative overflow-hidden select-none transition-all card-3d-shadow cursor-pointer"
     >

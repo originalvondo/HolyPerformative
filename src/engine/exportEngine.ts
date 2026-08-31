@@ -2,6 +2,27 @@ import { toCanvas } from 'html-to-image';
 import { CardState } from '../types/card';
 import { getEmbeddableFontCSS } from './fontEmbedder';
 
+function drawRoundedImage(
+  ctx: CanvasRenderingContext2D,
+  image: HTMLCanvasElement,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) {
+  ctx.save();
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, width, height, radius);
+  } else {
+    ctx.rect(x, y, width, height);
+  }
+  ctx.clip();
+  ctx.drawImage(image, x, y, width, height);
+  ctx.restore();
+}
+
 export async function downloadDualPrintSheet(
   frontElement: HTMLElement,
   backElement: HTMLElement,
@@ -14,16 +35,22 @@ export async function downloadDualPrintSheet(
 
     const fontEmbedCSS = await getEmbeddableFontCSS(state);
 
-    const renderOptions = {
-      pixelRatio: 2,
-      cacheBust: true,
-      backgroundColor: 'transparent',
-      fontEmbedCSS: fontEmbedCSS || undefined,
-    };
+    const frontBg = state.backgroundColor || '#FAF7EB';
+    const backBg = state.back?.backgroundColor || state.backgroundColor || '#FAF7EB';
 
     const [frontCanvas, backCanvas] = await Promise.all([
-      toCanvas(frontElement, renderOptions),
-      toCanvas(backElement, renderOptions),
+      toCanvas(frontElement, {
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: frontBg,
+        fontEmbedCSS: fontEmbedCSS || undefined,
+      }),
+      toCanvas(backElement, {
+        pixelRatio: 2,
+        cacheBust: true,
+        backgroundColor: backBg,
+        fontEmbedCSS: fontEmbedCSS || undefined,
+      }),
     ]);
 
     if (!frontCanvas || !backCanvas || frontCanvas.width === 0 || backCanvas.width === 0) {
@@ -34,6 +61,7 @@ export async function downloadDualPrintSheet(
     const cardH = frontCanvas.height;
     const padding = 80;
     const gap = 50;
+    const cornerRadius = (state.cardRadius || 16) * 2; // pixelRatio 2
 
     const sheetCanvas = document.createElement('canvas');
     sheetCanvas.width = cardW * 2 + padding * 2 + gap;
@@ -42,9 +70,11 @@ export async function downloadDualPrintSheet(
     const ctx = sheetCanvas.getContext('2d');
     if (!ctx) throw new Error('Could not obtain 2D canvas context');
 
+    // Clean sheet paper background
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
 
+    // Header info
     ctx.fillStyle = '#212121';
     ctx.font = 'bold 26px "Space Mono", monospace, sans-serif';
     ctx.fillText(`HOLYPERFORMATIVE // ${(state.name || 'ID CARD').toUpperCase()}`, padding, 50);
@@ -58,16 +88,31 @@ export async function downloadDualPrintSheet(
     const backX = padding + cardW + gap;
     const backY = padding + 20;
 
-    ctx.drawImage(frontCanvas, frontX, frontY);
-    ctx.drawImage(backCanvas, backX, backY);
+    // Draw Front & Back Cards with precise background and corner radius
+    drawRoundedImage(ctx, frontCanvas, frontX, frontY, cardW, cardH, cornerRadius);
+    drawRoundedImage(ctx, backCanvas, backX, backY, cardW, cardH, cornerRadius);
 
-    ctx.strokeStyle = '#616161';
+    // Draw Dashed Cutout Outlines
+    ctx.save();
+    ctx.strokeStyle = '#94A3B8';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([6, 6]);
-    ctx.strokeRect(frontX - 2, frontY - 2, cardW + 4, cardH + 4);
-    ctx.strokeRect(backX - 2, backY - 2, cardW + 4, cardH + 4);
 
-    ctx.setLineDash([]);
+    if (typeof ctx.roundRect === 'function') {
+      ctx.beginPath();
+      ctx.roundRect(frontX - 2, frontY - 2, cardW + 4, cardH + 4, cornerRadius + 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.roundRect(backX - 2, backY - 2, cardW + 4, cardH + 4, cornerRadius + 2);
+      ctx.stroke();
+    } else {
+      ctx.strokeRect(frontX - 2, frontY - 2, cardW + 4, cardH + 4);
+      ctx.strokeRect(backX - 2, backY - 2, cardW + 4, cardH + 4);
+    }
+    ctx.restore();
+
+    // Labels
     ctx.font = 'bold 16px "Space Mono", monospace, sans-serif';
     ctx.fillStyle = '#212121';
     ctx.fillText('▲ [FRONT CARD]', frontX, frontY + cardH + 32);
