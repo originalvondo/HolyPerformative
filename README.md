@@ -49,5 +49,5 @@ The build artifacts will be output to the `dist/` directory, ready for deploymen
 
 ## License
 
-[MIT LICENSE](/LICENSE.ext)
+[MIT LICENSE](/LICENSE.txt)
 
